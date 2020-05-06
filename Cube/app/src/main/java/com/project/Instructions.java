@@ -42,7 +42,7 @@ public class Instructions extends AppCompatActivity {
                     case R.id.action_solve:
                         Toast.makeText(Instructions.this, "Solve", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        //startActivity(new Intent(getApplicationContext(),debugScan.class)); //UNCOMMENT TO ENABLE DEBUG MODE. Access in application by clicking Instructions then Scan tab.
+                        //startActivity(new Intent(getApplicationContext(),DebugScan.class)); //UNCOMMENT TO ENABLE DEBUG MODE. Access in application by clicking Instructions then Scan tab.
                         overridePendingTransition(0,0);
                         break;
                     case R.id.action_settings:

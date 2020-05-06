@@ -274,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
         double g = bgr.val[1]/255;
         double b = bgr.val[0]/255;
 
+        // Code to directly convert from RGB to HSV from: https://www.geeksforgeeks.org/program-change-rgb-color-model-hsv-color-model/
         // h, s, v = hue, saturation, value
         double cmax = Math.max(r, Math.max(g, b)); // maximum of r, g, b
         double cmin = Math.min(r, Math.min(g, b)); // minimum of r, g, b
@@ -357,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
      * @return Boolean check if r1 and r2 intersect.
      */
     public boolean rectIntersection(Rect r1, Rect r2){
+
         int top = Math.max(r1.y,r2.y);
         int bottom = Math.min(r1.y+r1.height,r2.y+r2.height);
         int left = Math.max(r1.x,r2.x);
@@ -366,6 +368,16 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
             return true;
         } else
             return false;
+
+
+        /* Debug Usage:
+        if (r1.br().x > r2.tl().x && r2.br().x > r1.tl().x && r1.br().y > r2.tl().y && r2.br().y > r1.tl().y) {
+            Log.d("coord","duplicate found");
+            return true;
+        } else
+            Log.d("coord","No duplicate found");
+        return false;*/
+
     }
 
     /**
@@ -436,7 +448,6 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], Imgproc.arcLength(NewMtx,true)*0.1, true);
 
             if (contoursPoly[i].total() == 4) {
-                Log.d("ok", "" + contoursPoly[i].total());
                 boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
                 if (boundRect[i].area() > largestRect.area() && Math.abs(1 - (double) boundRect[i].height / boundRect[i].width) <= 0.25 &&
                         Math.abs(1 - (double) boundRect[i].width / boundRect[i].height) <= 0.25){
@@ -446,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
                 if (Math.abs(1 - (double) boundRect[i].height / boundRect[i].width) <= 0.3 &&
                         Math.abs(1 - (double) boundRect[i].width / boundRect[i].height) <= 0.3 && boundRect[i].area() > 2000 && boundRect[i].area() <= 6000) {
                     rects.add(boundRect[i]);
-                    Log.d("area", "b" + boundRect[i].area());
+                    Log.d("area", "" + boundRect[i].area());
                 }
             }
         }
@@ -454,17 +465,17 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
             //If found facelets are inside largest square (cube outline) and there are no duplicate facelets, then add square to validSquares Arraylist.
             boolean insideCube = false;
             ArrayList<Rect> validSquares = new ArrayList<>();
+            //Log.d("debug", Arrays.toString(rects.toArray()));
             boolean nodup = false;
                 for (int i = 0; i < rects.size(); i++) {
-                    Log.d("i", "" + i);
                     for (int j = 0; j < rects.size(); j++) {
-                        Log.d("j", "" + j);
 
                         if (j != i) {
                             if (!(rectIntersection(rects.get(i), rects.get(j)))) {
                                 nodup = true;
                             }
                         }
+
                     }
                     if ((rectIntersection(largestRect,rects.get(i)))) {
                         insideCube = true;
@@ -476,18 +487,15 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
                     insideCube = false;
                 }
 
-            Log.d("rects", "" + validSquares.size());
-
             //If there are 9 valid squares, average the colours in each facelet, and display the detected colour on screen.
             if (validSquares.size() <= 9) {
                 for (Rect rect : validSquares) {
                     Scalar rgb1 = Core.mean(new Mat(dst1, rect));
-                    Log.d("colors", rgb1.val[0] + " " + rgb1.val[1] + " " + rgb1.val[2]);
+                    Log.d("colours", rgb1.val[0] + " " + rgb1.val[1] + " " + rgb1.val[2]);
                     double[] rgb = newFrame.get(rect.y + rect.height / 2, rect.x + rect.width / 2);
                     Log.d("areas", "" + rect.area());
                     try {
                         Log.d("colours", "" + rgb[0] + rgb[1] + rgb[2]);
-                        Log.d("yellow:", "" + colourMatch(rgb1));
                         Scalar colourMatched = colourMatch(rgb1);
                         rect.setColour( (int) colourMatched.val[3]);
                         if (!(colourMatched.val[3] == 6)) {
@@ -549,7 +557,6 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
             ArrayList<Rect> sorted = sortIntoGrid(validSquares);
             for (Rect rect : sorted) {
                 faceConfigString += rect.getColour();
-                Log.d("rect", rect.x + "y:" + rect.y);
 
 
 /*              DEBUG USAGE:
@@ -578,7 +585,6 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
             //Show detected face in preview, if face is 5th face to be captured, change Capture Button to "Solve" for next face.
             runOnUiThread(new Runnable() {
                 public void run() {
-                    Log.d("show","show");
                     if (facesCaptured < 6) {
                         previews[facesCaptured - 1].setImageURI(null);
                         previews[facesCaptured - 1].setImageURI(Uri.parse("/data/user/0/com.project/files/mydir/Face" + facesCaptured + ".jpg"));
@@ -595,6 +601,10 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
 
         Log.d("rect", faceConfigString);
 
+        //Rect abcde = new Rect(new Point(150,150),new Point(150,200));
+        //Imgproc.rectangle(drawing,abcde.br(),new Point(abcde.tl().x,abcde.y + abcde.height + abcde.height),new Scalar(200,100,100), 5);
+        //Log.d("coord",abcde.x + " s s " + abcde.y + " s s " + abcde.tl() + " s s " + abcde.br() + " s s " + abcde.width + " s s " + abcde.height);
+
         //Return real time detected squares and face to camera view.
         return drawing;
     }
@@ -607,7 +617,6 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
         outFrame = mat;
         faceConfigString = "";
         File file = new File(getFilesDir(),"mydir");
-        Log.d("hello", file.getPath());
         if(!file.exists()){
             file.mkdir();
         }
@@ -716,7 +725,7 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
                 cubeConfigString += faceConfigString;
             } else if (facesCaptured < 7) {
                 cubeConfigString += faceConfigString;
-                Log.d("leng", cubeConfigString + "len" + cubeConfigString.length());
+                Log.d("len", cubeConfigString + "len" + cubeConfigString.length());
                     textView.setText("Loading Solution..");
 
                     if (solutionAnimated) {
@@ -746,7 +755,6 @@ public class MainActivity extends AppCompatActivity implements CvCameraViewListe
         Rect temp;
         //Sort entire List first by Y Values
         for (int i = 0; i < 9; i++) {
-            Log.d("rect",unsorted9[i].x + "yy:" + unsorted9[i].y);
             for (int j = i+1; j < 9; j++) {
                 if(unsorted9[i].x >= unsorted9[j].x) {
                     temp = unsorted9[i];

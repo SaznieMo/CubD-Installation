@@ -27,17 +27,25 @@
         android:largeHeap="true"
         android:roundIcon="@drawable/applogo"
         android:supportsRtl="true"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
-        <activity android:name=".debugScan"></activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SolutionAnimated" />
-        <activity android:name=".Solution" />
+        <activity android:name=".DebugScan"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SolutionAnimated"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Solution"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Settings"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".Instructions" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Instructions"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Splash"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

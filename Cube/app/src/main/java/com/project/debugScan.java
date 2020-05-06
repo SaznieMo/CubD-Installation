@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Debug class used as a test bench for Computer Vision functionalities. Deprecated after application was built. Only use to enable debugging in future.
  */
-public class debugScan extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class DebugScan extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     CameraBridgeViewBase mOpenCvCameraView;
     Boolean normal = true;
@@ -53,7 +53,7 @@ public class debugScan extends AppCompatActivity implements CameraBridgeViewBase
                     case R.id.action_instructions:
                         break;
                     case R.id.action_solve:
-                        startActivity(new Intent(getApplicationContext(),debugScan.class));
+                        startActivity(new Intent(getApplicationContext(), DebugScan.class));
                         overridePendingTransition(0,0);
                         break;
                     case R.id.action_settings:

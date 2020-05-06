@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -88,6 +89,8 @@ public class SolutionAnimated extends AppCompatActivity {
 
         backButton.setAlpha(0.5f);
         backButton.setClickable(false);
+
+        RelativeLayout rellayout = findViewById((R.id.rellayout));
 
         // Get the Intent that started this activity and extract the string to cubeState.
         Intent intent = getIntent();
@@ -289,6 +292,7 @@ public class SolutionAnimated extends AppCompatActivity {
             }
             backButton.setVisibility(View.INVISIBLE);
             nextButton.setVisibility(View.INVISIBLE);
+            rellayout.setBackgroundResource(0);
             AlertDialog alertDialog = new AlertDialog.Builder(SolutionAnimated.this).create();
             alertDialog.setTitle("Oops!");
             alertDialog.setMessage("There was an error in your scanned cube!");

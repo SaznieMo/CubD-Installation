@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:cube="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background1"
+    tools:context=".SolutionAnimated">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="563dp"
+        android:layout_above="@id/animcube"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="39dp">
+
+        <Button
+            android:id="@+id/backMove"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:background="@color/red1"
+            android:onClick="backMove"
+            android:text="Previous"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/nextMove"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1"
+            android:background="@color/red1"
+            android:onClick="nextMove"
+            android:text="Next"
+            android:textColor="#FFFFFF"
+            />
+    </LinearLayout>
+
+    <com.animcubeandroid.AnimCube
+        android:id="@+id/animcube"
+        android:layout_width="match_parent"
+        android:layout_height="345dp"
+        android:layout_above="@id/bottom_navigation"
+        cube:backgroundColor="#A7A77B"
+        cube:backFacesDistance="0" />
+
+    <TextView
+        android:layout_centerInParent="true"
+        android:id="@+id/solutionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/menu" >
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</RelativeLayout>
